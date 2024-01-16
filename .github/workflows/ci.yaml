@@ -57,6 +57,6 @@ jobs:
       - name: Check Helm Plugin
         run: helm dt
   Release:
-    if: (github.event_name == 'push' && contains(github.event.head_commit.message, "Prepare release v")
+    if: (github.event_name == 'push' && contains(github.event.head_commit.message, 'Prepare release v')
     needs: Validate
     uses: ./.github/workflows/release.yaml
