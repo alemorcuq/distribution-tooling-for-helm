@@ -27,9 +27,10 @@ jobs:
 
       - name: Update Version
         run: |
-          sed 's/version: ".*"/version: "${{ steps.version.outputs.PLUGIN_VERSION }}"/g' plugin.yaml
-          sed 's/var Version = ".*"/var Version = "${{ steps.version.outputs.PLUGIN_VERSION }}"/g' cmd/dt/version.go
+          sed -i 's/version: ".*"/version: "${{ steps.version.outputs.PLUGIN_VERSION }}"/' plugin.yaml
+          sed -i 's/var Version = ".*"/var Version = "${{ steps.version.outputs.PLUGIN_VERSION }}"/' cmd/dt/version.go
           git add plugin.yaml cmd/dt/version.go
+          git config user.name "Release CI"
           git commit -m 'Prepare release "${{ inputs.tag }}"'
           git push
         env:
