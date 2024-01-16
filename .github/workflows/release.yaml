@@ -1,17 +1,12 @@
 name: Release
 on:
-  pull_request_target:
-    types:
-      - closed
-    paths:
-      - 'plugin.yaml'
+  workflow_call:
 
 permissions:
   contents: write
 
 jobs:
   Release:
-    if: (github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/'))
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
