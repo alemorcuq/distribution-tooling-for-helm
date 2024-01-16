@@ -22,12 +22,18 @@ jobs:
       - name: Fetch Version
         id: version
         run: |
-          PLUGIN_VERSION=v$(cat plugin.yaml | grep "version" | cut -d '"' -f 2)
-          echo "::set-output name=PLUGIN_VERSION::$PLUGIN_VERSION"
+          PLUGIN_VERSION="$(echo "${{ inputs.tag }}" | cut -d 'v')"
+          echo "::set-output name=PLUGIN_VERSION::$PLUGIN_VERSION
 
-      - name: Check Version
-        if: ${{ steps.version.outputs.PLUGIN_VERSION != inputs.tag }}
-        run: echo "Plugin version does not match input tag. Please make sure you have prepared the release first." && exit 1
+      - name: Update Version
+        run: |
+          sed 's/version: ".*"/version: "${{ steps.version.outputs.PLUGIN_VERSION }}"/g' plugin.yaml
+          sed 's/var Version = ".*"/var Version = "${{ steps.version.outputs.PLUGIN_VERSION }}"/g' cmd/dt/version.go
+          git add plugin.yaml cmd/dt/version.go
+          git commit -m 'Prepare release "${{ inputs.tag }}"'
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set Golang
         uses: actions/setup-go@fac708d6674e30b6ba41289acaab6d4b75aa0753 # v4.0.1
