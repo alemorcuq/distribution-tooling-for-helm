@@ -22,7 +22,7 @@ jobs:
       - name: Fetch Version
         id: version
         run: |
-          PLUGIN_VERSION="$(echo "${{ inputs.tag }}" | cut -d'v')"
+          PLUGIN_VERSION="$(echo "${{ inputs.tag }}" | tr -d 'v')"
           echo "::set-output name=PLUGIN_VERSION::$PLUGIN_VERSION
 
       - name: Update Version
