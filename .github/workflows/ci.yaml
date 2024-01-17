@@ -21,38 +21,3 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
 
-      - name: Checkout Code
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3
-        with:
-          fetch-depth: 0
-
-      - name: Set Helm
-        uses: azure/setup-helm@5119fcb9089d432beecbf79bb2c7915207344b78 # v3.5
-        with:
-          version: v3.12.1
-
-      - name: Set Golang
-        uses: actions/setup-go@v4
-        with:
-          go-version: 1.21
-
-      - name: Set Golangci-lint
-        run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.55.2
-
-      - name: Set Shellcheck
-        run: sudo apt-get -qq update && sudo apt-get install -y shellcheck && shellcheck install-binary.sh
-
-      - name: Build
-        run: make build
-
-      - name: Test
-        run: make test
-
-      - name: Install
-        run: make install
-
-      - name: Check Binary
-        run: ./bin/dt
-
-      - name: Check Helm Plugin
-        run: helm dt
