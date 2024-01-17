@@ -25,6 +25,9 @@ jobs:
         run: |
           PLUGIN_VERSION=v$(cat plugin.yaml | grep "version" | cut -d '"' -f 2)
           LATEST_VERSION=$(git describe --tags --abbrev=0 | tr -d 'v')
+          echo $PLUGIN_VERSION
+          echo $LATEST_VERSION
+          [ $PLUGIN_VERSION = $LATEST_VERSION ] && echo yes || echo no
           echo PLUGIN_VERSION=$PLUGIN_VERSION >> "$GITHUB_ENV"
           echo LATEST_VERSION=$LATEST_VERSION >> "$GITHUB_ENV"
 
